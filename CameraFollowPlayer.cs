@@ -25,7 +25,7 @@ public class CameraFollowPlayer : MonoBehaviour
     {
         transform.position = player.transform.position + offset;
 
-        c.orthographicSize *= zoomOffset + player.GetComponent<PlayerController>().size;
+        c.orthographicSize = zoomOffset + player.GetComponent<PlayerController>().size;
 
     }
 }
