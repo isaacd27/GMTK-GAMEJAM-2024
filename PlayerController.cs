@@ -7,12 +7,15 @@ public class PlayerController : MonoBehaviour
     public float speed = 1.0f;
     public float horizontalInput;
 
+    public Slimeball slimeDecay;
+
     public bool faceleft;
     public float size = 1.0f;
 
-    // Set Variables for player jump
+    // Set Variables for player jump and fall
     public float jumpForce = 0.25f;
     bool isGrounded;
+    bool isFalling;
     private Rigidbody2D rb;
 
     // Set Boundaries
@@ -20,13 +23,17 @@ public class PlayerController : MonoBehaviour
 
     //References
     public UIbehaviour uIbehaviour;
+    public Animator anim;
+    private bool isPaused;
 
     void Start()
     {
         // Access player's Rigidbody
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         isGrounded = true;
         Cursor.visible = false;
+        isPaused = !isPaused;
     }
 
     // Update is called once per frame
@@ -42,26 +49,35 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z) && size > 1f)
         {
-            Debug.Log("Forced Decrease");
+            Debug.Log("Forced Decrease/Discarded slime");
+            //instantiate discarded slimeball here
             decreaseSize(1.0f);
+            decreaseMass(0.2f);
         }
 
-        if(Input.GetKeyDown(KeyCode.X)){
+        if (Input.GetKeyDown(KeyCode.X))
+        {
             Debug.Log("Forced Increase");
             increaseSize(1.0f);
+            increaseMass(0.2f);
         }
-        
-        if(!faceleft){
+        if (!faceleft)
+        {
             transform.localScale = new Vector2(size, size);
-        }else{
+        }
+        else
+        {
             transform.localScale = new Vector2(-size, size);
         }
-    
-        
+
+
         // set horizontal input and translate player movement
         horizontalInput = Input.GetAxis("Horizontal");
         //add /size to add a feeling of weight to being bigger
         transform.Translate(Vector2.right * Time.deltaTime * horizontalInput * speed);
+
+        // set SpeedX in animator as absolute value of horizontal input
+        anim.SetFloat("SpeedX", Mathf.Abs(horizontalInput));
 
         // face the player sprite in the correct direction
         if (horizontalInput < 0f)
@@ -89,12 +105,34 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
-        
+        // set Jumping bool in animator as opposite of isGrounded bool
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        anim.SetBool("Jumping", !isGrounded);
+
+        // Falling method
+        if (rb.velocity.y < 0) 
+        {
+            isFalling = true;
+        }
+        else
+        {
+            isFalling = false;
+        }
+
+        // set Falling bool in animator as isFalling bool
+        anim.SetBool("Falling", isFalling);
+
+        if ((Input.GetKeyDown(KeyCode.Escape)) && (!isPaused))
         {
             uIbehaviour.Pause();
             Cursor.visible = true;
+            isPaused = !isPaused;
+        }
+        else if ((Input.GetKeyDown(KeyCode.Escape)) && (isPaused))
+        {
+            uIbehaviour.Resume();
+            Cursor.visible = false;
+            isPaused = !isPaused;
         }
     }
 
@@ -127,6 +165,16 @@ public class PlayerController : MonoBehaviour
     public void decreaseSize(float s)
     {
         size -= s;
+    }
+
+    public void increaseMass(float mass)
+    {
+        rb.mass += mass;
+    }
+
+    public void decreaseMass(float mass)
+    {
+        rb.mass -= mass;
     }
     public void die()
     {

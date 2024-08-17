@@ -6,15 +6,10 @@ using UnityEngine.AI;
 public class Slimeball : MonoBehaviour
 {
     public float sizeI = 1.0f;
+    public float massI = 0.2f;
 
     // Start is called before the first frame update
     void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
     {
         
     }
@@ -29,6 +24,7 @@ public class Slimeball : MonoBehaviour
         }else{
         
             p.increaseSize(sizeI);
+            p.increaseMass(massI);
 
             Destroy(this.gameObject);
         }

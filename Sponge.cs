@@ -66,22 +66,18 @@ public class Sponge : MonoBehaviour
                 {
                     //change below later so player size is reduced to 1 or reduced by the maxsize
 
-                    if (size > maxsize)
+                    if (p.size > maxsize)
                     {
                         // prevents size from being lost to the ether, can be removed when inital size increase is changed.
                         p.increaseSize(size - maxsize);
-                        
-                        //the above may need changing later
-                        //p.decreaseMass(0.2f*maxsize);
                         size = maxsize;
                         
                     }
                     else
                     {
                         size += p.size - (p.size - 1);
-                        //p.decreaseMass(0.2f* (p.size -1));
+                        p.decreaseMass(0.2f * (p.size - 1));
                         p.size = p.size - (p.size - 1);
-                        
                     }
 
                     if (p.size < 1)
@@ -111,4 +107,6 @@ public class Sponge : MonoBehaviour
             }
         }
     }
+
+    
 }
