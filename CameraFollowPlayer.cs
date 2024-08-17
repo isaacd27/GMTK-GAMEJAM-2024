@@ -14,7 +14,8 @@ public class CameraFollowPlayer : MonoBehaviour
     void Start()
     {
         //if player is not set, will set it as the first object tagged 'player'
-        if (player == null){
+        if (player == null)
+        {
             player = GameObject.FindWithTag("Player");
         }
         c = gameObject.GetComponent<Camera>();

@@ -9,11 +9,11 @@ public class Sponge : MonoBehaviour
     //if the sponge only grows in one dimension or not.
     public bool oneDir = false;
     public float size = 1f;
-    public float maxsize = 10f;
+    public float maxsize = 2f;
     public float growSpeed = 3f;
 
     //is the sponge growing;
-    public bool isGrowing = false;
+    public bool isGrowing;
 
     //if the sponge only grows in one scale, does it grow up/down or left/right?
     public bool isy = true;
@@ -42,14 +42,14 @@ public class Sponge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((isGrowing == true) && (gameObject.transform.localScale.x <= 2))
+        if ((isGrowing) && (gameObject.transform.localScale.x <= maxsize))
         {
             gameObject.transform.localScale = new Vector3(transform.localScale.x + (growSpeed * Time.deltaTime), transform.localScale.y + (growSpeed * Time.deltaTime));
             Debug.Log(gameObject.transform.localScale.magnitude);          
         }
-        else if ((isGrowing == true) && (gameObject.transform.localScale.x == 2))
+        else if ((!isGrowing) && (gameObject.transform.localScale.x == maxsize))
         {
-            isGrowing = false;
+            isGrowing = !isGrowing;
         }
     }
 
@@ -70,13 +70,18 @@ public class Sponge : MonoBehaviour
                     {
                         // prevents size from being lost to the ether, can be removed when inital size increase is changed.
                         p.increaseSize(size - maxsize);
+                        
+                        //the above may need changing later
+                        //p.decreaseMass(0.2f*maxsize);
                         size = maxsize;
                         
                     }
                     else
                     {
                         size += p.size - (p.size - 1);
+                        //p.decreaseMass(0.2f* (p.size -1));
                         p.size = p.size - (p.size - 1);
+                        
                     }
 
                     if (p.size < 1)
@@ -97,7 +102,7 @@ public class Sponge : MonoBehaviour
                     }
                     else
                     {
-                        isGrowing = true;
+                        isGrowing = !isGrowing;
                     }
 
 
