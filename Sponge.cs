@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
 
 public class Sponge : MonoBehaviour
@@ -73,7 +69,7 @@ public class Sponge : MonoBehaviour
                         p.increaseSize(size - maxsize);
                         p.increaseMass(0.2f * (size - maxsize));
                         size = maxsize;
-                        
+
                     }
                     else
                     {
@@ -110,5 +106,5 @@ public class Sponge : MonoBehaviour
         }
     }
 
-    
+
 }

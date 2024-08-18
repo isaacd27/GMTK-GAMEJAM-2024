@@ -3,14 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField]static AudioSource SFXsource;
+    [SerializeField] static AudioSource SFXsource;
 
     #region Player Variables
     public static AudioClip playerJump;
     public static AudioClip playerMove;
     public static AudioClip getLarge;
 
-    
+
     public static AudioClip getSmall;
     #endregion
 
@@ -25,15 +25,15 @@ public class AudioManager : MonoBehaviour
     public static AudioClip Spong;
     #endregion
 
-    
 
-void Start()
+
+    void Start()
     {
         playerJump = Resources.Load<AudioClip>("Plop_sfx");
 
         Slimeball = Resources.Load<AudioClip>("Pickup_sfx");
 
-        gameOver= Resources.Load<AudioClip>("Death_sfx");
+        gameOver = Resources.Load<AudioClip>("Death_sfx");
 
         Break = Resources.Load<AudioClip>("ConcreteBreak_sfx");
 
@@ -55,61 +55,64 @@ void Start()
 
     public static void playSFX(String clip)
     {
-        switch (clip){
+        switch (clip)
+        {
             case "Jump":
             case "playerJump":
 
-            SFXsource.PlayOneShot(playerJump);
-            break;
+                SFXsource.PlayOneShot(playerJump);
+                break;
 
             case "Smaller":
             case "getSmall":
 
-            SFXsource.PlayOneShot(getSmall);
+                SFXsource.PlayOneShot(getSmall);
 
-            break;
+                break;
 
 
             case "Bigger":
             case "getLarge":
 
-            SFXsource.PlayOneShot(getLarge);
+                SFXsource.PlayOneShot(getLarge);
 
-            break;
+                break;
 
             case "Death":
             case "gameOver":
             case "kill":
 
-            SFXsource.PlayOneShot(gameOver);
+                SFXsource.PlayOneShot(gameOver);
 
-            break;
+                break;
 
             case "ConcreteBreak":
             case "Break":
 
-            SFXsource.PlayOneShot(Break);
-            break;
+                SFXsource.PlayOneShot(Break);
+                break;
 
             case "Pickup":
             case "Slimeball":
-            SFXsource.PlayOneShot(Slimeball);
-            break;
+                SFXsource.PlayOneShot(Slimeball);
+                break;
 
         }
 
 
-        
+
 
         //SFXsource.PlayOneShot(clip);
     }
 
 
-    public static void playbystring(String clip){
+    public static void playbystring(String clip)
+    {
         SFXsource.PlayOneShot(Resources.Load<AudioClip>(clip));
     }
 
-    public AudioClip getBreakSFX(){
+    public AudioClip getBreakSFX()
+    {
         return Break;
     }
 

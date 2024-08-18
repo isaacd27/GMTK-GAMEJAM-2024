@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     public UIbehaviour uIbehaviour;
     public Animator anim;
     private bool isPaused;
+    [SerializeField] private GameObject fakeSlimeBall;
+    private GameObject fakeSlimeBallInst;
+    private float slimeBallCoolDown = 0;
 
     void Start()
     {
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         isGrounded = true;
         Cursor.visible = false;
-        isPaused = !isPaused;
+        isPaused = false;
     }
 
     // Update is called once per frame
@@ -39,7 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         //controls shouldn't work while dead by adding an if(!isdead) surrounding
 
-        if (size == 0.0f)
+        if (size <= 0.0f)
         {
             size = 0.1f;
             Debug.Log("Invalid size");
@@ -49,6 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Forced Decrease/decrease");
             //slime spawn code here
+            SpawnSlimeBall();
             decreaseSize(1.0f);
             decreaseMass(0.2f);
         }
@@ -59,36 +63,9 @@ public class PlayerController : MonoBehaviour
             increaseSize(1.0f);
             increaseMass(0.2f);
         }
-        if (!faceleft)
-        {
-            transform.localScale = new Vector2(size, size);
-        }
-        else
-        {
-            transform.localScale = new Vector2(-size, size);
-        }
 
+        Move();
 
-        // set horizontal input and translate player movement
-        horizontalInput = Input.GetAxis("Horizontal");
-        //add /size to add a feeling of weight to being bigger
-        transform.Translate(Vector2.right * Time.deltaTime * horizontalInput * speed);
-
-        // set SpeedX in animator as absolute value of horizontal input
-        anim.SetFloat("SpeedX", Mathf.Abs(horizontalInput));
-
-        // face the player sprite in the correct direction
-        if (horizontalInput < 0f)
-        {
-            transform.localScale = new Vector2(-1 * size, size);
-            faceleft = true;
-        }
-
-        if (horizontalInput > 0f)
-        {
-            transform.localScale = new Vector2(1 * size, size);
-            faceleft = false;
-        }
         // set function for fall out of boundary
         if (transform.position.y < -yBoundary)
         {
@@ -109,7 +86,7 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("Jumping", !isGrounded);
 
         // Falling method
-        if (rb.velocity.y < 0) 
+        if (rb.velocity.y < 0)
         {
             isFalling = true;
         }
@@ -121,17 +98,42 @@ public class PlayerController : MonoBehaviour
         // set Falling bool in animator as isFalling bool
         anim.SetBool("Falling", isFalling);
 
-        if ((Input.GetKeyDown(KeyCode.Escape)) && (!isPaused))
+        if ((Input.GetKeyDown(KeyCode.Escape)))
         {
-            uIbehaviour.Pause();
-            Cursor.visible = true;
-            isPaused = !isPaused;
+            if (!isPaused)
+            {
+                uIbehaviour.Pause();
+                Cursor.visible = true;
+                isPaused = true;
+            }
+            else
+            {
+                uIbehaviour.Resume();
+                Cursor.visible = false;
+                isPaused = false;
+            }
+
         }
-        else if ((Input.GetKeyDown(KeyCode.Escape)) && (isPaused))
+    }
+
+    public void Move()
+    {
+        // set horizontal input and translate player movement
+        horizontalInput = Input.GetAxis("Horizontal");
+        //add /size to add a feeling of weight to being bigger
+        transform.Translate(Vector2.right * Time.deltaTime * horizontalInput * speed);
+
+        // set SpeedX in animator as absolute value of horizontal input
+        anim.SetFloat("SpeedX", Mathf.Abs(horizontalInput));
+
+        // face the player sprite in the correct direction
+        if (horizontalInput > 0.001f)
         {
-            uIbehaviour.Resume();
-            Cursor.visible = false;
-            isPaused = !isPaused;
+            transform.localScale = new Vector2(1 * size, size);
+        }
+        else if (horizontalInput < -0.001f)
+        {
+            transform.localScale = new Vector2(-1 * size, size);
         }
     }
 
@@ -140,6 +142,11 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
             isGrounded = true;
+    }
+
+    public void SpawnSlimeBall()
+    {
+        fakeSlimeBallInst = Instantiate(fakeSlimeBall, transform.transform.position, Quaternion.identity);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
