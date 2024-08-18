@@ -9,7 +9,8 @@ public class Sponge : MonoBehaviour
     //if the sponge only grows in one dimension or not.
     public bool oneDir = false;
     public float size = 1f;
-    public float maxsize = 2f;
+    [SerializeField]
+    private float maxsize = 2f;
     public float growSpeed = 3f;
 
     //is the sponge growing;
@@ -45,7 +46,7 @@ public class Sponge : MonoBehaviour
         if ((isGrowing) && (gameObject.transform.localScale.x <= maxsize))
         {
             gameObject.transform.localScale = new Vector3(transform.localScale.x + (growSpeed * Time.deltaTime), transform.localScale.y + (growSpeed * Time.deltaTime));
-            Debug.Log(gameObject.transform.localScale.magnitude);          
+            //Debug.Log(gameObject.transform.localScale.magnitude); to verify object is scaling.
         }
         else if ((!isGrowing) && (gameObject.transform.localScale.x == maxsize))
         {
@@ -70,6 +71,7 @@ public class Sponge : MonoBehaviour
                     {
                         // prevents size from being lost to the ether, can be removed when inital size increase is changed.
                         p.increaseSize(size - maxsize);
+                        p.increaseMass(0.2f * (size - maxsize));
                         size = maxsize;
                         
                     }

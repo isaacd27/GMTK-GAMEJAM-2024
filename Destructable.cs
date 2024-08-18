@@ -22,6 +22,8 @@ public class Destructable : MonoBehaviour
         if (coll.gameObject.tag == "Player"){
             PlayerController p = coll.gameObject.GetComponent<PlayerController>();
             if(p.size > Breaksize){
+                //GameObject.FindGameObjectWithTag
+                AudioManager.playSFX("Break");
                 //play particle effect/animation
                 Destroy(this.gameObject);
             }

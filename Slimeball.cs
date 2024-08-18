@@ -22,7 +22,7 @@ public class Slimeball : MonoBehaviour
         if (p == null){
         Debug.Log("Error: non player object tagged as player");
         }else{
-        
+            AudioManager.playSFX("Pickup");
             p.increaseSize(sizeI);
             p.increaseMass(massI);
 

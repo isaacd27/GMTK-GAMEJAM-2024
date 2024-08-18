@@ -7,8 +7,6 @@ public class PlayerController : MonoBehaviour
     public float speed = 1.0f;
     public float horizontalInput;
 
-    public Slimeball slimeDecay;
-
     public bool faceleft;
     public float size = 1.0f;
 
@@ -49,8 +47,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z) && size > 1f)
         {
-            Debug.Log("Forced Decrease/Discarded slime");
-            //instantiate discarded slimeball here
+            Debug.Log("Forced Decrease/decrease");
+            //slime spawn code here
             decreaseSize(1.0f);
             decreaseMass(0.2f);
         }
@@ -100,6 +98,7 @@ public class PlayerController : MonoBehaviour
         // Jump method
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
+            AudioManager.playSFX("Jump");
             //May want to have the size/2 or some other way to prevent this from getting outta control.
             rb.AddForce(Vector2.up * jumpForce * 1000 * size, ForceMode2D.Force);
             isGrounded = false;
