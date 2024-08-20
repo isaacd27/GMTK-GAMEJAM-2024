@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        if (faceleft)
+        if (!faceleft)
         {
             transform.localScale = new Vector2(1 * size, size);
         }
