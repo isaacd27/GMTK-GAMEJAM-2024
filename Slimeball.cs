@@ -18,10 +18,9 @@ public class Slimeball : MonoBehaviour
             }
             else
             {
-                AudioManager.playSFX("Pickup");
+                audioManager.playSFX("Pickup");
                 p.increaseSize(sizeI);
                 p.increaseMass(massI);
-                Debug.Log("entered");
                 Destroy(this.gameObject);
 
             }

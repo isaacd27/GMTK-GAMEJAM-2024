@@ -27,6 +27,17 @@ public class PlayerController : MonoBehaviour
     private GameObject fakeSlimeBallInst;
     private float slimeBallCoolDown = 0;
 
+
+
+    public void increaseSize(float s)
+    {
+        size += s;
+    }
+
+    public void decreaseSize(float s)
+    {
+        size -= s;
+    }
     void Start()
     {
         // Access player's Rigidbody
@@ -57,11 +68,23 @@ public class PlayerController : MonoBehaviour
             decreaseMass(0.2f);
         }
 
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             Debug.Log("Forced Increase");
-            increaseSize(1.0f);
-            increaseMass(0.2f);
+
+
+           // increaseSize(1.0f);
+           // increaseMass(0.2f);
+        }
+
+        if (faceleft)
+        {
+            transform.localScale = new Vector2(1 * size, size);
+        }
+        else
+        {
+            transform.localScale = new Vector2(-1 * size, size);
         }
 
         Move();
@@ -75,7 +98,7 @@ public class PlayerController : MonoBehaviour
         // Jump method
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
-            AudioManager.playSFX("Jump");
+            audioManager.playSFX("Jump");
             //May want to have the size/2 or some other way to prevent this from getting outta control.
             rb.AddForce(Vector2.up * jumpForce * 1000 * size, ForceMode2D.Force);
             isGrounded = false;
@@ -137,18 +160,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // simple ground detection
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-            isGrounded = true;
-    }
-
     public void SpawnSlimeBall()
     {
         fakeSlimeBallInst = Instantiate(fakeSlimeBall, transform.transform.position, Quaternion.identity);
     }
 
+    #region Collision
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Respawn")
@@ -158,20 +175,23 @@ public class PlayerController : MonoBehaviour
             uIbehaviour.Retry();
         }
     }
+
+    // simple ground detection
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            isGrounded = true;
+    }
+
+    #endregion
+
+    #region Slime Size
     public float getSize()
     {
         return size;
     }
 
-    public void increaseSize(float s)
-    {
-        size += s;
-    }
 
-    public void decreaseSize(float s)
-    {
-        size -= s;
-    }
 
     public void increaseMass(float mass)
     {
@@ -186,4 +206,5 @@ public class PlayerController : MonoBehaviour
     {
         isdead = true;
     }
+    #endregion
 }

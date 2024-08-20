@@ -3,17 +3,20 @@
 using UnityEngine.SceneManagement;
 public class UIbehaviour : MonoBehaviour
 {
-    public GameObject pauseMenu;
+    [SerializeField] private GameObject pauseMenu;
 
     private void Start()
     {
-        pauseMenu.SetActive(false);
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(false);
+        }
     }
     public void Play()
     {
         //loads the scene numbered 1 in the build settings.
         //Debug.Log("wtf");
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     #region MainMenu
@@ -28,9 +31,9 @@ public class UIbehaviour : MonoBehaviour
     #region InGame
     public void Menu()
     {
-        //loads the scene numbered 0 in the build settings.
+        //loads the scene numbered 1 in the build settings.
         Debug.Log("Menu time");
-        //SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void Retry()
@@ -41,9 +44,12 @@ public class UIbehaviour : MonoBehaviour
 
     public void Pause()
     {
-        pauseMenu.SetActive(true);
-        Cursor.visible = true;
-        Time.timeScale = 0f;
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(true);
+            Cursor.visible = true;
+            Time.timeScale = 0f;
+        }
     }
 
     public void Resume()

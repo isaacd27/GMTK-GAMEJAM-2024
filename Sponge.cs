@@ -15,6 +15,9 @@ public class Sponge : MonoBehaviour
     //if the sponge only grows in one scale, does it grow up/down or left/right?
     public bool isy = true;
 
+    // Animator Reference
+    public Animator anim;
+
     public float getSize()
     {
         return size;
@@ -34,6 +37,7 @@ public class Sponge : MonoBehaviour
     void Start()
     {
         isGrowing = false;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -43,6 +47,8 @@ public class Sponge : MonoBehaviour
         {
             gameObject.transform.localScale = new Vector3(transform.localScale.x + (growSpeed * Time.deltaTime), transform.localScale.y + (growSpeed * Time.deltaTime));
             //Debug.Log(gameObject.transform.localScale.magnitude); to verify object is scaling.
+
+            anim.SetTrigger("Enlarge Sponge");
         }
         else if ((!isGrowing) && (gameObject.transform.localScale.x == maxsize))
         {

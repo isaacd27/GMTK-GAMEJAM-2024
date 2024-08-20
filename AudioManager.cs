@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
-public class AudioManager : MonoBehaviour
+public class audioManager : MonoBehaviour
 {
     [SerializeField] static AudioSource SFXsource;
 
