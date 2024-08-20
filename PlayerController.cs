@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 0.25f;
     bool isGrounded;
     bool isFalling;
+    bool hasLanded;
     private Rigidbody2D rb;
 
     // Set Boundaries
@@ -32,11 +33,13 @@ public class PlayerController : MonoBehaviour
     public void increaseSize(float s)
     {
         size += s;
+        audioManager.playSFX("Slimeball");
     }
 
     public void decreaseSize(float s)
     {
         size -= s;
+        audioManager.playSFX("Pickup");
     }
     void Start()
     {
@@ -46,6 +49,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = true;
         Cursor.visible = false;
         isPaused = false;
+        hasLanded = true;
     }
 
     // Update is called once per frame
@@ -78,6 +82,10 @@ public class PlayerController : MonoBehaviour
            // increaseMass(0.2f);
         }
 
+        
+
+        Move();
+
         if (faceleft)
         {
             transform.localScale = new Vector2(1 * size, size);
@@ -86,8 +94,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector2(-1 * size, size);
         }
-
-        Move();
 
         // set function for fall out of boundary
         if (transform.position.y < -yBoundary)
@@ -102,6 +108,7 @@ public class PlayerController : MonoBehaviour
             //May want to have the size/2 or some other way to prevent this from getting outta control.
             rb.AddForce(Vector2.up * jumpForce * 1000 * size, ForceMode2D.Force);
             isGrounded = false;
+            hasLanded = false;
         }
 
         // set Jumping bool in animator as opposite of isGrounded bool
@@ -115,6 +122,11 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if (isFalling && !hasLanded)
+            {
+                hasLanded = true;
+                audioManager.playSFX("Land");
+            }
             isFalling = false;
         }
 
@@ -153,10 +165,12 @@ public class PlayerController : MonoBehaviour
         if (horizontalInput > 0.001f)
         {
             transform.localScale = new Vector2(1 * size, size);
+            faceleft = false;
         }
         else if (horizontalInput < -0.001f)
         {
             transform.localScale = new Vector2(-1 * size, size);
+            faceleft = true;
         }
     }
 
